@@ -1,0 +1,30 @@
+---
+
+## Phase 10: Frontend QR + Sharing (Dashboard Polish)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 10.1 | **QR Code Integration** | ✅ DONE | Integrated `api.qrserver.com` directly into the Dashboard UI to avoid sandboxing/build errors with external libraries. |
+| 10.2 | **Share Modal** | ✅ DONE | Added "Share" button in `Dashboard.tsx` event cards → opens modal. Modal has: QR code image and copyable link. |
+| 10.3 | **Expiration Visibility** | ✅ DONE | Show `expires_at` date on event cards in Dashboard. |
+| 10.4 | **Expired Status Guard** | ✅ DONE | Show `Expired` badge when event is past expiry; disable Share + Search buttons. |
+
+---
+
+## Phase 11: Guest Flow in Results
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 11.1 | **Guest Identification** | ✅ DONE | `Results.tsx` generates/retrieves `guest_id` from `localStorage` on mount and passes to `searchByImage`. |
+| 11.2 | **Lead Capture Forms** | ✅ DONE | `Results.tsx` fetches event details to check `require_guest_details` flag. Shows name/email/phone form before search. |
+| 11.3 | **Rate Limit UX** | ✅ DONE | Handles HTTP 429 gracefully — shows "You've used all 3 searches for this event" message instead of generic error. |
+
+---
+
+## Phase 12: Lead Export (Owner Access)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 12.1 | **Backend Leads Endpoint** | ✅ DONE | Added `GET /events/{event_id}/leads` endpoint in `main.py` (guarded by event ownership). |
+| 12.2 | **Dashboard Export** | ✅ DONE | Added CSV export button in `Dashboard.tsx` and `Admin.tsx` event cards → calls leads endpoint → downloads as CSV. |
+| 12.3 | **API Wiring** | ✅ DONE | Added `get_event_leads` call wired up in `api.ts`. |

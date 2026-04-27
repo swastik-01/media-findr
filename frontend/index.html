@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Media Findr — Find Your Event Photos & Videos</title>
+    <meta name="description" content="Search by name or upload your photo to find all your moments from events. AI-powered face matching." />
+    <meta name="author" content="The AI Product Factory" />
+
+    <meta property="og:title" content="Media Findr" />
+    <meta property="og:description" content="Find your event photos and videos with AI-powered face matching." />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="apple-touch-icon" href="/logo.svg" />
+    <!-- Apply theme BEFORE React mounts to prevent light→dark flash -->
+    <script>
+      (function() {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

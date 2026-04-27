@@ -1,0 +1,40 @@
+name: Build and Deploy to Azure
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Azure Container Registry (Optional - if using ACR)
+        # uses: azure/docker-login@v1
+        # with:
+        #   login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+        #   username: ${{ secrets.REGISTRY_USERNAME }}
+        #   password: ${{ secrets.REGISTRY_PASSWORD }}
+        run: echo "Skipping login if deploying directly via Zip/Git or if using Public Registry"
+
+      - name: Build and Push Docker Image
+        # If using ACR, push the image there. Otherwise, build it to verify.
+        run: |
+          docker build -t media-findr:latest .
+          # docker tag media-findr:latest ${{ secrets.REGISTRY_LOGIN_SERVER }}/media-findr:${{ github.sha }}
+          # docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/media-findr:${{ github.sha }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'agba-snap-finder' # REPLACE this with your actual Azure App Service name
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          # images: '${{ secrets.REGISTRY_LOGIN_SERVER }}/media-findr:${{ github.sha }}'
