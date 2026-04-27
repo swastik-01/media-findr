@@ -1,10 +1,23 @@
 # Stage 1: Build Frontend
 FROM node:20-slim AS frontend-builder
 WORKDIR /app/frontend
+
+# Add Build Arguments for Vite (required at build time for React)
+ARG VITE_COGNITO_USER_POOL_ID
+ARG VITE_COGNITO_CLIENT_ID
+ARG VITE_COGNITO_DOMAIN
+ARG VITE_AWS_REGION
+
 COPY frontend/package*.json ./
 RUN npm install
 COPY frontend/ ./
-RUN npm run build
+
+# Run build with the environment variables
+RUN VITE_COGNITO_USER_POOL_ID=$VITE_COGNITO_USER_POOL_ID \
+    VITE_COGNITO_CLIENT_ID=$VITE_COGNITO_CLIENT_ID \
+    VITE_COGNITO_DOMAIN=$VITE_COGNITO_DOMAIN \
+    VITE_AWS_REGION=$VITE_AWS_REGION \
+    npm run build
 
 # Stage 2: Build Backend and Final Image
 FROM python:3.11-slim

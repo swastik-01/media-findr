@@ -26,11 +26,13 @@ jobs:
         run: echo "Skipping login if deploying directly via Zip/Git or if using Public Registry"
 
       - name: Build and Push Docker Image
-        # If using ACR, push the image there. Otherwise, build it to verify.
         run: |
-          docker build -t media-findr:latest .
-          # docker tag media-findr:latest ${{ secrets.REGISTRY_LOGIN_SERVER }}/media-findr:${{ github.sha }}
-          # docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/media-findr:${{ github.sha }}
+          docker build \
+            --build-arg VITE_COGNITO_USER_POOL_ID=${{ secrets.VITE_COGNITO_USER_POOL_ID }} \
+            --build-arg VITE_COGNITO_CLIENT_ID=${{ secrets.VITE_COGNITO_CLIENT_ID }} \
+            --build-arg VITE_COGNITO_DOMAIN=${{ secrets.VITE_COGNITO_DOMAIN }} \
+            --build-arg VITE_AWS_REGION=${{ secrets.VITE_AWS_REGION }} \
+            -t media-findr:latest .
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
