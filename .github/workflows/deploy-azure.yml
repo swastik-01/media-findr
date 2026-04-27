@@ -40,9 +40,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
 
-      - name: Deploy to Azure Web App
+      - name: Prepare production artifact
+        run: |
+          mkdir build_artifact
+          cp -r backend build_artifact/
+          mkdir -p build_artifact/frontend
+          cp -r frontend/dist build_artifact/frontend/
+          cp requirements.txt build_artifact/
+          
+      - name: 'Deploy Optimized Package'
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'media-findr'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: .
+          package: build_artifact
